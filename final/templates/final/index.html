@@ -5,28 +5,50 @@
     
     <input id="room-id-submit" type="button" value="Create room">
 
-    <!-- paginator for available rooms -->
-    <ul>
+   
+<div class="container ">
+    <div class="row">
         {% for room in page %}
-            <li class="room" data-room="{{ room.id }}"   >
-                <a href="{% url 'room' room.id %}">{{ room.id }}</a>
-            </li>
+            <div class="col-6" >
+                <a href="{% url 'room' room.id %}">
+                    Room {{ room.id }}
+                </a>
+            </div>
+        {% empty %}
+            <div class="empty-rooms">
+                No available rooms at the moment.
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
+    <nav aria-label="Room pages">
+        <ul class="pagination justify-content-center mt-4">
             {% if page.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a>
+                </li>
             {% endif %}
-            <li class="page-item"><a class="page-link" href="#">Page {{ page.number }} of {{ page.paginator.num_pages }}</a></li>
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ page.number }} of {{ page.paginator.num_pages }}
+                </span>
+            </li>
+
             {% if page.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page.paginator.num_pages }}">Last</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page.paginator.num_pages }}">Last</a>
+                </li>
             {% endif %}
         </ul>
-        </nav>
+    </nav>
+</div>
 
     <script> 
         // adjust later to enable confirmation pop up when user creates a room

@@ -6,7 +6,9 @@
     <h1 id="room_id" data-room="{{ room_id }}">Room ID: {{ room_id }}</h1>
     <button id="leave-button" data-room="{{ room_id }}">Leave Room</button>
     <div id="transfer-view"></div>
-    <div id="board-view" data-board="{{ board_id }}"></div>
+    <div id="board-container">
+        <div id="board-view" data-board="{{ board_id }}"></div>
+    </div>
     <div id="player-view" data-board="{{ board_id }}"></div>
             
     <script src="{% static 'final/room.js' %}"></script>

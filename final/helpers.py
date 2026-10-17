@@ -100,6 +100,7 @@ def update_players_status(board, status):
             player.user.wins += 1
         player.user.games_played += 1
         player.status = status
+        player.user.save()
         active_players.append(player) 
     Board_Participation.objects.bulk_update(active_players, ['status'])
 

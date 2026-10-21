@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 # for .env file
-import os
+import os, dj_database_url
 from dotenv import load_dotenv
 
 # load env variables from .env
@@ -29,7 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+
+DEBUG = os.getenv("DEBUG", "False") == "True"
 LOGIN_URL = "/login"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
 
@@ -58,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,7 +93,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [os.getenv("REDIS_URL")],
         },
     },
 }
@@ -99,19 +102,10 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # change NAME
-        'NAME': os.getenv('DATABASE'),
-        # additional database credentials
-        'USER': os.getenv('USER'),
-        # HOST must be set to 'db'
-        'HOST': os.getenv('HOST'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'PORT': os.getenv('PORT')
-
-    }
-}
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+    )
 
 AUTH_USER_MODEL = 'final.User'
 

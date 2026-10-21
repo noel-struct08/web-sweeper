@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 function: 'ping'
             }))
         }
-    }, 10000) // 10 seconds
+    }, 30000) // 30 seconds
     
     // send a message later
     socket.onclose = function(e) {
@@ -134,6 +134,7 @@ function render_board(cells) {
         const cell_html = document.querySelector(`#row_${cell.row}col_${cell.col}`)
         if (cell.value == 'is_mine'){
             cell_html.className = 'cell is_mine';
+            cell_html.textContent = '🎃'
         }
         else if (cell.is_revealed){
             cell_html.className = 'cell is_revealed'
@@ -141,7 +142,7 @@ function render_board(cells) {
         }
         else if (cell.is_flagged){
             cell_html.className = 'cell is_flagged'
-            cell_html.textContent = 'F'
+            cell_html.textContent = '🕸️'
         }
         else{
             cell_html.className = 'cell is_unrevealed'
@@ -149,20 +150,26 @@ function render_board(cells) {
         }
     })
 }
+
 function render_player(participants) {
     // clear player view for every update
     document.querySelector('#player-view').innerHTML = ""
     // fill player view with participants
+    const player = document.createElement("p");
+    player.className = "player";
     participants.players.forEach(participant => {
-        const player = document.createElement("div");
         if (participant.online){
             connection = 'Online'
         }
         else{
-            connection = 'Offline'
+            connection = 'Away'
         }
-        player.textContent = `${participant.username} | ${participant.wins} | ${connection} | ${participant.status}`
-        document.querySelector('#player-view').append(player);
-       // there was a nested dict somewhere, take note for later
+        if (participant.status != 'spectator'){
+            player.append(` ${participant.username} | wins: ${participant.wins} | ${connection}  🎃 `) 
+        }
+        else{
+            player.append(`${participant.username} (${participant.status}) | ${connection} | wins: ${participant.wins} 🎃  `)
+        }
     })
+    document.querySelector('#player-view').append(player);
 }

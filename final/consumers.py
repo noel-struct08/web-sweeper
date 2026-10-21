@@ -49,8 +49,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data): 
         text_data_json = json.loads(text_data)
         function = text_data_json["function"]
-        self.board = await Board.objects.aget(pk=self.board.id) 
+        self.board = await Board.objects.aget(pk=self.board.id)
+
+        # checks if user is still active in current room 
         participation = await Board_Participation.objects.aget(board=self.board, user=self.user)
+        if participation.has_left:
+            await self.close()
+            return
+        
         if function == "ping":
             # updates database for user's last_seen for every ping
             participation.last_seen = timezone.now()
@@ -102,10 +108,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "move_status": move_status
                 }
             )
-            # update player for every move
-            await self.channel_layer.group_send(
-                self.room_group_id, {"type": "player.render", "participants": await database_sync_to_async(self.board.serialize_participants)()} 
-            )
+          
 
             if self.board.is_finished == True:
                asyncio.create_task(self.transfer_board(self.board, self.room_id))

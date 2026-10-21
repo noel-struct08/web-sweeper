@@ -33,17 +33,6 @@ DEBUG = True
 LOGIN_URL = "/login"
 ALLOWED_HOSTS = []
 
-CSRF_TRUSTED_ORIGINS = (
-    os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if os.getenv("CSRF_TRUSTED_ORIGINS")
-    else []
-)
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
 
 # Application definition
 
@@ -150,12 +139,4 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-STATIC_URL = '/static/'
-
-if not DEBUG:
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-    STORAGES = {
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        },
-    }
+STATIC_URL = 'static/'

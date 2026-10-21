@@ -1,25 +1,47 @@
 {% extends "final/layout.html" %}
 
-{% block body %}
-    Create or enter a room to start sweeping. <br>
+{% block body %}    
     
-    <input id="room-id-submit" type="button" value="Create room">
-
+    
    
-<div class="container ">
-    <div class="row">
+<table class="rooms-table">
+    <thead>
+        <tr>
+            <td colspan="3">
+                <form action="{% url 'create_room' %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.room_name }}
+                    <input type="submit" value="Create Room">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>Room No.</th>
+            <th>Name</th>
+            <th>Players</th>
+        </tr>
+    </thead>
+
+    <tbody>
         {% for room in page %}
-            <div class="col-6" >
-                <a href="{% url 'room' room.id %}">
-                    Room {{ room.id }}
-                </a>
-            </div>
+            <tr>
+                <td>
+                    <a href="{% url 'room' room.id %}">
+                        Room {{ room.id }}
+                    </a>
+                </td>
+                <td>{{ room.room_name }}</td>
+                <td>{{ room.player_count }}</td>
+            </tr>
         {% empty %}
-            <div class="empty-rooms">
-                No available rooms at the moment.
-            </div>
+            <tr>
+                <td colspan="3" class="empty-rooms">
+                    No available rooms at the moment.
+                </td>
+            </tr>
         {% endfor %}
-    </div>
+    </tbody>
+</table>
 
     <nav aria-label="Room pages">
         <ul class="pagination justify-content-center mt-4">
@@ -51,11 +73,6 @@
 </div>
 
     <script> 
-        // adjust later to enable confirmation pop up when user creates a room
-        document.querySelector('#room-id-submit').onclick = function() {
-            // room creation
-            window.location.pathname = 'create/';
-        };
         // might need to throw this away
         document.querySelectorAll('.room').forEach(element => {
             element.onclick() = function(){

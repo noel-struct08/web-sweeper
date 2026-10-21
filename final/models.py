@@ -45,7 +45,7 @@ class Board(models.Model):
                     'username': participant.user.username,
                     'status': participant.status,
                     'wins': participant.user.wins,
-                    'online': True if participant.last_seen >= (timezone.now() - timedelta(seconds=30))
+                    'online': True if participant.last_seen >= (timezone.now() - timedelta(seconds=35))
                     else False
                 }
                 for participant in self.participations.all()

@@ -3,25 +3,23 @@
 {% block body %}
     <!-- redirect back to create/get room, adjust template depending on who rendered this page(pass a variablem attach room id if applicable)-->
     
-    <div>
-        Current: {{ role }} in {{ active_room }}
+    <div class="center">
+        Currently {{ role }} in room {{ active_room }}
         <br>
         {% if url == 'join_room' %}
-            Joining: {{ room_id }}
+            You're attempting to join room {{ room_id }}
             <br>
         {% endif %}
-        
-        Leave Current Room? <br>
-    </div>
-
-    <form action="{% url 'confirm_room' %}" method='POST'> 
-        {% csrf_token %}
-        <input type="hidden" name="room_id" value="{{room_id}}">
-        <input type="hidden" name="source" value="{{url}}">
-        <input type="submit">
-    </form>
-    <!-- redirect back to index probably-->
-   <a href="{% url 'index' %}">Return to Home Page</a>
-    
+        Leave Current Room? 
+            <form action="{% url 'confirm_room' %}" method='POST'> 
+                {% csrf_token %}
+                <input type="hidden" name="room_id" value="{{room_id}}">
+                <input type="hidden" name="room_name" value="{{room_name}}">
+                <input type="hidden" name="source" value="{{url}}">
+                <input type="submit" value="Confirm" class="btn btn-primary">
+                <a href="{% url 'index' %}" class="btn btn-secondary" role="button">Return to Home Page</a>
+            </form>
+        <!-- redirect back to index probably-->
+    </div> 
     
 {% endblock %}

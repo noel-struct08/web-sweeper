@@ -3,16 +3,18 @@
 {% load static %}
 {% block body %}
     <!-- could replace the json_script thing with this instead\-->
-    <h1 id="room_id" data-room="{{ room_id }}">Room ID: {{ room_id }}</h1>
-    <button id="leave-button" data-room="{{ room_id }}">Leave Room</button>
-    <div id="transfer-view"></div>
-    <div id="board-container">
-        <div id="board-view" data-board="{{ board_id }}"></div>
-    </div>
-    <div id="player-view" data-board="{{ board_id }}"></div>
-            
-    <script src="{% static 'final/room.js' %}"></script>
-         
+    <div class="room-layout">
+        <div id="room-header">
+            <h4 id="room_id" data-room="{{ room_id }}">Room ID: {{ room_id }}</h4>
+            <button id="leave-button" data-room="{{ room_id }}" type="button">Leave Room</button>
+        </div>
 
-    
+        <div id="transfer-view"></div>
+        <div id="board-container">
+            <div id="board-view" data-board="{{ board_id }}"></div>
+        </div>
+        <footer id="player-view" data-board="{{ board_id }}"></footer>
+    </div>
+    <script src="{% static 'final/room.js' %}"></script>
+
 {% endblock %}
